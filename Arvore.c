@@ -39,7 +39,7 @@ tArvore* CriaArvore(tArvore* dir, tArvore* esq, char c, int f)
 	
 	return a;
 }
-int PreencheVetor(FILE* Arquivo, int* Vetor) // O vetor tem que ser alocado de acordo com o tamanho do arquivo;
+int* PreencheVetor(FILE* Arquivo, int* Vetor) // O vetor tem que ser alocado de acordo com o tamanho do arquivo;
 {
 	int i=0; // Indice;
 	char Letra; // Espaço para a atribuição de uma letra do arquivo;
@@ -56,6 +56,7 @@ int PreencheVetor(FILE* Arquivo, int* Vetor) // O vetor tem que ser alocado de a
 /* Cria Lista com todos os simbolos do arquivo de entrada  */
 tArvore* ListaSimbolos (FILE* Arquivo)
 {
+	int Qtd_Itens = 0;
 	tArvore* Arvore = NULL;
 	tArvore* Aux;
 	char Letra;
@@ -137,20 +138,20 @@ tArvore* MontaArvore(tArvore* Arvore)
 tTabela* TabelaCodificada(tArvore *Arvore, tTabela *Tabela, char* Code, int QtdBit)
 {
 	int i=0;
-	if(Arvore->Esq != NULL) // Segue pela esquerda da arvore;
+	if(Arvore->esq!= NULL) // Segue pela esquerda da arvore;
 	{
 		Code[QtdBit] = '1'; // Atribui o bit 1;
 		QtdBit++; // Atribui a quantidade de bits;
 		//Faz a recursão da função com a referencia do no da esquerda;
-		Tabela = TabelaCodificada(Arvore->Esq, Tabela, Code, QtdBit); //Recursão para continuar explorando os filhos da Arvore;
+		Tabela = TabelaCodificada(Arvore->esq, Tabela, Code, QtdBit); //Recursão para continuar explorando os filhos da Arvore;
 		QtdBit--;
 	}
-	if(Arvore->Dir != NULL) // Segue pela direita da arvore;
+	if(Arvore->dir!= NULL) // Segue pela direita da arvore;
 	{
 		Code[QtdBit] = '0'; // Atribui o bit 0;
 		QtdBit++; // Atribui a quantidade de bits;
 		//Faz a recursão da função com a referencia do no da esquerda;
-		Tabela = TabelaCodificada(Arvore->Dir, Tabela, Code, QtdBit); //Recursão para continuar explorando os filhos da Arvore;
+		Tabela = TabelaCodificada(Arvore->dir, Tabela, Code, QtdBit); //Recursão para continuar explorando os filhos da Arvore;
 		QtdBit--;
 	}
 	if(Arvore->Letra != '\0') // Atribuições da lista para a Tabela.
@@ -169,7 +170,7 @@ tTabela* TabelaCodificada(tArvore *Arvore, tTabela *Tabela, char* Code, int QtdB
 void Codificacao(FILE* Arquivo, FILE* Saida, tTabela* Tabela, int Quantidade)
 {
 	int i, j, limite = 0;
-	unsigned char buffer = 0
+	unsigned char buffer = 0;
 	unsigned char Letra = 0;
 	
 	while(fscanf(Arquivo, "%c", &Letra) != EOF) // Verifica o final do arquivo;

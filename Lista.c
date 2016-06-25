@@ -22,6 +22,6 @@ tLista* CriaLista()
 	tLista* lista = (tLista*)malloc(sizeof(tLista));
 	lista->Ant = NULL;
 	lista->Prox = NULL;
-	lista->Item->Letra = NULL;
-	lista->Item->Freq = NULL;
+	lista->Item.Letra = 0;
+	lista->Item.Freq = 0;
 }
