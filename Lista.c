@@ -1,21 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
+#include "Lista.h"
 
 // LISTA DUPLAMENTE ENCADEADA CIRCULAR
 
-typedef struct {
+struct Dado{
 	char Letra;
 	int Freq;
-}TipoDados;
+};
 
-typedef struct lista{
+struct lista{
 	TipoDados Item;
 	struct lista* Ant;
 	struct lista* Prox;
-}tLista;
+};
 
 tLista* InitLista(void)
 {
@@ -74,4 +70,34 @@ void freeLista(tLista *lista)
 		free(aux);
 		aux = prox;
 	}
+}
+
+tLista *ListaProx(tLista *elemento)
+{
+	return elemento->Prox;
+}
+
+tLista *ListaAnt(tLista *elemento)
+{
+	return elemento->Ant;
+}
+
+char ListaLetra(tLista *elemento)
+{
+	return elemento->Item.Letra;
+}
+
+int ListaFreq(tLista *elemento)
+{
+	return elemento->Item.Freq;
+}
+
+void SetProx(tLista *elemento, tLista *prox)
+{
+	elemento->Prox = prox;
+}
+
+void SetAnt(tLista *elemento, tLista *ant)
+{
+	elemento->Ant = ant;
 }

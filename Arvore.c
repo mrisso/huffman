@@ -1,16 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
+#include "Lista.h"
 // ARVORE BINARIA GENÉRICA
 // O CODIGO NÃO UTILIZA O TAD LISTA AINDA, AO INSERIR MODIFICAR ATRIBUIÇÕES!!!!
 
 typedef struct Arv tArvore;
 
 struct Arv{ 
-	char Letra; //Letra e Freq serão inicializados no TAD Lista. Juntamente com Prox e Ant;
-	int Freq; // A arvore terá um tipo lista que conterá esses espaços de memoria; 
+	tLista *Item;
 	struct Arv* dir;
 	struct Arv* esq;
 };
@@ -29,11 +24,10 @@ tArvore* CriaArvoreVazia(void)
 {
 	return NULL;
 }
-tArvore* CriaArvore(tArvore* dir, tArvore* esq, char c, int f)
+tArvore* CriaArvore(tArvore* dir, tArvore* esq, tLista *Item)
 {
 	tArvore* a = (tArvore*)malloc(sizeof(tArvore));
-	a->Letra = c;
-	a->Freq = f;
+	a->Item=Item;
 	a->esq = esq;
 	a->dir = dir;
 	
@@ -53,54 +47,18 @@ int* PreencheVetor(FILE* Arquivo, int* Vetor) // O vetor tem que ser alocado de 
 	rewind(Arquivo);
 	return Vetor;
 }
-/* Cria Lista com todos os simbolos do arquivo de entrada  */
-tArvore* ListaSimbolos (FILE* Arquivo)
-{
-	int Qtd_Itens = 0;
-	tArvore* Arvore = NULL;
-	tArvore* Aux;
-	char Letra;
-	
-	//Cria uma estrutura caso não tenha elementos na lista;
-	while(fscanf(Arquivo, "%c", &Letra) != EOF)
-	{
-		if(Arvore == NULL)
-			Arvore = CriaArvore(CriaArvoreVazia(), CriaArvoreVazia(), Letra, 1);
-			Arvore->Ant = NULL; // Adicionar pelo TAD lista
-			Arvore->Prox = NULL; // Adicionar pelo TAD lista
-		else
-		{
-			Aux = Arvore;
-			
-			while(Aux->Letra != Letra && Aux->Prox != NULL)
-				Aux = Aux->Prox;
-			//Insere um elemento na lista caso nao tenha o elemento.
-			if(Aux->Letra != Letra)
-			{
-				Aux->Prox = CriaArvore(CriaArvoreVazia(), CriaArvoreVazia(), Letra, 1);
-				Aux->Prox->Ant = Aux;
-				Aux = Aux->Prox; // Adicionar pelo TAD lista
-				Aux->Prox = NULL; // Adicionar pelo TAD lista
-			}
-			else
-				Aux->Freq++; // Incrementa a Frequencia do elemento caso ele já foi inserido.
-		}
-		Qtd_Itens++; // Tentar contar a quantidade de itens na lista Arvore...(Para uso do qSort em OrdenaArvore)
-	}
-	rewind(Arquivo);
-	return Arvore;
-}
+
 /* Funções de Comparação/QSort */
 int compara(const void* v1, const void* v2)
 {
 	int freq1, freq2;
-	freq1 = ((tArvore*)v1)->Freq;
-	freq2 = ((tArvore*)v2)->Freq;
+	freq1 = ListaFreq(((tArvore*)v1)->Item);
+	freq2 = ListaFreq(((tArvore*)v2)->Item);
 	return (freq1 - freq2);
 }
 void OrdenaArvore(tArvore* Arvore)
 {
-	qsort (Arvore, n, sizeof(tArvore), compara); // 'n' é o numero de elementos da lista Arvore! 
+//	qsort (Arvore, n, sizeof(tArvore), compara); // 'n' é o numero de elementos da lista Arvore! 
 	// Criar uma função para contar o numero de elementos da lista Arvore!!
 	// Lembre-se que a lista Arvore tem dois itens com informações, ou seja, cada par de itens conta como um elemento;
 }
@@ -108,24 +66,24 @@ void OrdenaArvore(tArvore* Arvore)
 tArvore* MontaArvore(tArvore* Arvore)
 {
 	tArvore* NovoNo;
-	Arvore = OrdenaArvore(Arvore); // Ordena a Lista dos elementos;
+	OrdenaArvore(Arvore); // Ordena a Lista dos elementos;
 	
-	while(Arvore->Prox != NULL)
+	while(ListaProx(Arvore->Item) != NULL)
 	{
 		//Cria o nó pai com a soma das frequencias dos filhos;
-		NovoNo = CriaArvore(Arvore->Prox, Arvore, '\0', (Arvore->Freq + Arvore->Prox->Freq));
+		NovoNo = CriaArvore(ListaProx(Arvore->Item), Arvore, '\0', (Arvore->Freq + Arvore->Prox->Freq));
 		
 		//Muda as referencias do nó filhos
-		Arvore = Arvore->Prox;
-		Arvore->Ant->Prox = NULL;
-		Arvore->Ant = NULL;
+		Arvore = ListaProx(Arvore->Item);
+		SetProx(ListaAnt(Arvore->Item),NULL);//Arvore->Ant->Prox = NULL;
+		SetAnt(Arvore->Item,NULL);//Arvore->Ant = NULL;
 		
 		//Insere nó Pai a lista
-		if(Arvore->Prox != NULL)
+		if(ListaProx(Arvore->Item) != NULL)
 		{
-			Arvore->Prox->Ant = NovoNo;
-			NovoNo->Prox = Arvore->Prox;
-			Arvore->Prox = NULL;
+			SetProx(ListaAnt(Arvore->Item),NovoNo);//Arvore->Ant->Prox = NULL;
+			SetProx(NovoNo,ListaProx(Arvore->Item));//= ListaProx(Arvore->Item);
+			SetProx(Arvore->Item,NULL);
 			
 			//Ordena a lista dos elementos
 			Arvore = OrdenaArvore(NovoNo);
