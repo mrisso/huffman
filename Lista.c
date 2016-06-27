@@ -2,10 +2,6 @@
 
 // LISTA DUPLAMENTE ENCADEADA CIRCULAR
 
-struct Dado{
-	char Letra;
-	int Freq;
-};
 
 struct lista{
 	TipoDados Item;
@@ -25,6 +21,15 @@ tLista* CriaItem(char letra, int freq) // Recebe a letra e a frequência do item
 	lista->Prox = NULL;
 	lista->Item.Letra = letra; // <-
 	lista->Item.Freq = freq; // <-
+}
+
+tLista* InitItem(TipoDados item)
+{
+	tLista* lista = (tLista*)malloc(sizeof(tLista));
+	lista->Ant = NULL;
+	lista->Prox = NULL;
+	lista->Item = item;
+	return lista;
 }
 
 void InsereItem(tLista **lista, tLista *novoItem)
@@ -100,4 +105,14 @@ void SetProx(tLista *elemento, tLista *prox)
 void SetAnt(tLista *elemento, tLista *ant)
 {
 	elemento->Ant = ant;
+}
+
+char DadoLetra(TipoDados elemento)
+{
+	return elemento.Letra;
+}
+
+int DadoFreq(TipoDados elemento)
+{
+	return elemento.Freq;
 }

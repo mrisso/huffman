@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Lista.h"
+
 long TamanhoArquivo(const char *Arq_in);
 void LeArquivo(FILE* entrada, char* Vetor);
 
@@ -30,6 +32,7 @@ int main(int argc, char** argv)
 	fclose(entrada);
 	return 0;
 }
+
 long TamanhoArquivo(const char *Arq_in)
 {
   long Tamanho;
@@ -39,8 +42,17 @@ long TamanhoArquivo(const char *Arq_in)
   fclose(arquivo);
   return Tamanho;
 }
+
 void LeArquivo(FILE* entrada, char* Vetor)
 {
 	while((fgets(Vetor, sizeof(Vetor), entrada)) != NULL)
 		printf("%s", Vetor);
 }	
+
+void CriaLista(TipoDados *vetor, int tam, tLista **lista)
+{
+	int contador;
+
+	for(contador=0;contador<tam;contador++)			
+		InsereItem(lista,InitItem(vetor[contador]));
+}

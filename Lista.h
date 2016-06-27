@@ -3,12 +3,17 @@
 #include <string.h>
 #include <math.h>
 
-typedef struct Dado TipoDados;
+typedef struct Dado{
+	char Letra;
+	int Freq;
+} TipoDados;
 typedef struct lista tLista;
 
 tLista* InitLista(void);
 
 tLista* CriaItem(char letra, int freq);
+
+tLista* InitItem(TipoDados item);
 
 void InsereItem(tLista **lista, tLista *novoItem);
 
@@ -26,7 +31,11 @@ tLista *ListaAnt(tLista *elemento);
 
 char ListaLetra(tLista *elemento);
 
+char DadoLetra(TipoDados elemento);
+
 int ListaFreq(tLista *elemento);
+
+int DadoFreq(TipoDados elemento);
 
 void SetProx(tLista *elemento, tLista *prox);
 
