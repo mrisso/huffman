@@ -170,15 +170,49 @@ int compara (const void *v1, const void *v2)
 	return d1 - d2;
 }
 
-tLista *operaLista(tLista *lista, int tam)
+tLista *merge(tLista *m1, tLista *m2)
 {
+	m2->Item.Freq += m1->Item.Freq;
+	m2->Ant=m1->Ant;
+	free(m1);
+	return m2;
+}
+
+void listaToVetor(tLista *lista, TipoDados *vetor, int tam)
+{
+	int contador;
 	tLista *andador = lista;
 
-	if(andador == NULL)
-		return NULL;
+	for(contador=0;contador<tam;contador++)
+	{
+		vetor[contador] = andador->Item;
+		andador = andador->Prox;
+	}
+}
 
-	
+void vetorToLista(tLista **lista, TipoDados *vetor, int tam)
+{
+	int contador;
+	tLista *andador = *lista;
 
+	for(contador=0;contador<tam;contador++)
+	{
+		andador->Item = vetor[contador];
+		andador = andador->Prox;
+	}
+}
+
+
+void operaLista(tLista **lista, int tam)
+{
+	tLista *andador = *lista;
+	TipoDados *vetor = (TipoDados *)malloc(tam*sizeof(TipoDados));
+
+	listaToVetor(*lista,vetor,tam);
+	ordenaVetor(vetor,tam);
+	vetorToLista(lista,vetor,tam);
+	free(vetor);
+	*lista = merge(andador,andador->Prox);
 }
 
 void ordenaVetor(TipoDados *vetor, int tam)

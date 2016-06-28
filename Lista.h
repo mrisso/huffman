@@ -47,4 +47,12 @@ void SetAnt(tLista *elemento, tLista *ant);
 
 int compara (const void *v1, const void *v2);
 
+tLista *merge(tLista *m1, tLista *m2);
+
+void listaToVetor(tLista *lista, TipoDados *vetor, int tam);
+
+void vetorToLista(tLista **lista, TipoDados *vetor, int tam);
+
+void operaLista(tLista **lista, int tam);
+
 void ordenaVetor(TipoDados *vetor, int tam);
