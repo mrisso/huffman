@@ -6,10 +6,11 @@
 struct Arv{ 
 	char letra;
 	int freq;
+	struct Arv* pai;
 	struct Arv* dir;
 	struct Arv* esq;
 };
-
+/*
 struct tabela{
 	char Letra;
 	int Freq;
@@ -17,70 +18,53 @@ struct tabela{
 	char* CodeBit; // Codigo Binario. Atribuido a letra pesquisada, são atribuidos zeros e um's de acordo com o "caminhar" na arvore.
 	//(Esquerda - 1 ; Direita - 0)
 };
-
+*/
 tArvore* CriaArvoreVazia(void)
 {
 	return NULL;
 }
 
-tArvore* CriaArvore(tArvore* dir, tArvore* esq, tLista *Item)
+tArvore* CriaArvore(tLista **lista, tArvore* dir, tArvore* esq)
 {
-	tArvore* a = (tArvore*)malloc(sizeof(tArvore));
-	a->Item=Item;
-	a->esq = esq;
-	a->dir = dir;
+	tArvore* arvore = (tArvore*)malloc(sizeof(tArvore));
+	arvore->letra = lista->Letra;
+	arvore->freq = lista->Freq;
+	arvore->pai = NULL;
+	arvore->esq = esq;
+	arvore->dir = dir;
 	
-	return a;
-}
-int* PreencheVetor(FILE* Arquivo, int* Vetor) // O vetor tem que ser alocado de acordo com o tamanho do arquivo;
-{
-	int i=0; // Indice;
-	char Letra; // Espaço para a atribuição de uma letra do arquivo;
-	
-	while(fscanf(Arquivo, "%c", &Letra) != EOF)
-	{
-		Vetor[i] = Letra;
-		i++;
-	}
-	
-	rewind(Arquivo);
-	return Vetor;
-}
+	return arvore;
 
-/* Funções de Comparação/QSort */
-int compara(const void* v1, const void* v2)
-{
-	int freq1, freq2;
-	freq1 = ListaFreq(((tArvore*)v1)->Item);
-	freq2 = ListaFreq(((tArvore*)v2)->Item);
-	return (freq1 - freq2);
-}
-
-tArvore* MontaArvore(tArvore* Arvore)
+tArvore* MontaArvore(tArvore* Arvore, tLista** Lista, int tam)
 {
 	tArvore* NovoNo;
-	OrdenaArvore(Arvore); // Ordena a Lista dos elementos;
-	
-	while(ListaProx(Arvore->Item) != NULL)
+		
+	while(ListaProx(Lista) != NULL)
 	{
-		//Cria o nó pai com a soma das frequencias dos filhos;
-		NovoNo = CriaArvore(ListaProx(Arvore->Item), Arvore, '\0', (Arvore->Freq + Arvore->Prox->Freq));
+		if(Lista->flag != 1 && ListaProx(Lista->flag) != 1)
+		{
+			//Cria o nó pai com NULL e atualiza valor dos filhos para os nós da Arvore
+			NovoNo = CriaArvore(Lista, CriaArvoreVazia(), CriaArvoreVazia());
+			NovoNo = CriaArvore(Lista->Prox, CriaArvoreVazia(), CriaArvoreVazia());
+		}
+		Arvore->pai = Lista->Freq;
+		operaLista(Lista, tam);
+		tam--;
+		
 		
 		//Muda as referencias do nó filhos
-		Arvore = ListaProx(Arvore->Item);
-		SetProx(ListaAnt(Arvore->Item),NULL);//Arvore->Ant->Prox = NULL;
-		SetAnt(Arvore->Item,NULL);//Arvore->Ant = NULL;
+		Lista = ListaProx(Lista->Item);
+		SetProx(ListaAnt(Lista->Item), NULL);//Lista->Ant->Prox = NULL;
+		SetAnt(Lista->Item, NULL);//Lista->Ant = NULL;
 		
 		//Insere nó Pai a lista
-		if(ListaProx(Arvore->Item) != NULL)
+		/*if(ListaProx(Arvore->Item) != NULL)
 		{
 			SetProx(ListaAnt(Arvore->Item),NovoNo);//Arvore->Ant->Prox = NULL;
 			SetProx(NovoNo,ListaProx(Arvore->Item));//= ListaProx(Arvore->Item);
 			SetProx(Arvore->Item,NULL);
 			
-			//Ordena a lista dos elementos
-			Arvore = OrdenaArvore(NovoNo);
-		}
+		}*/
 	}
 	
 	return NovoNo;
