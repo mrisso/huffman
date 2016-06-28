@@ -1,12 +1,15 @@
+#define DEBUG				0
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "Arvore.h"
+
 #include "Lista.h"
 
 long TamanhoArquivo(const char *Arq_in);
 void LeArquivo(FILE* entrada, char* Vetor, long tamanho);
+void ordenaVetor(TipoDados *vetor, int tam);
 
 int main(int argc, char** argv)
 {
@@ -28,7 +31,7 @@ int main(int argc, char** argv)
 	char Vetor[tamanho];
 	int tam=0;
 	TipoDados* Dados = NULL;
-	tLista** Lista;
+	tLista* Lista = NULL;
 
 	LeArquivo(entrada, Vetor, tamanho);
 
@@ -36,15 +39,17 @@ int main(int argc, char** argv)
 	
 	for(i=0; i<255; i++)
 		if(Dados[i].Freq > 0)
-		{
-			printf("%c - %d\n", Dados[i].Letra, Dados[i].Freq);
 			tam++; // tamanho do vetor Dados do tipo estrutura TipoDados;
-		}
-	printf("%d\n", tam);
-	printf("%s", Vetor);
-	printf("\n");
+
+	ordenaVetor(Dados,tam);
+
+	printf("%s\n",Vetor);
+
+	if(DEBUG)
+		for(i=0;i<tam;i++)
+			printf("%c %d\n",Dados[i].Letra,Dados[i].Freq);
 	
-	//CriaLista(Dados, tam, Lista); //Erro na InsereItem;
+	CriaLista(Dados, tam, &Lista); 
 	
 	fclose(entrada);
 	return 0;
@@ -64,3 +69,4 @@ void LeArquivo(FILE* entrada, char* Vetor, long tamanho)
 {
 	fread(Vetor, sizeof(char), tamanho, entrada);
 }
+

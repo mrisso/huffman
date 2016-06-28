@@ -1,11 +1,11 @@
-
 #include "Arvore.h"
 #include "Lista.h"
 // ARVORE BINARIA GENÉRICA
 // O CODIGO NÃO UTILIZA O TAD LISTA AINDA, AO INSERIR MODIFICAR ATRIBUIÇÕES!!!!
 
 struct Arv{ 
-	tLista *Item;
+	char letra;
+	int freq;
 	struct Arv* dir;
 	struct Arv* esq;
 };
@@ -22,6 +22,7 @@ tArvore* CriaArvoreVazia(void)
 {
 	return NULL;
 }
+
 tArvore* CriaArvore(tArvore* dir, tArvore* esq, tLista *Item)
 {
 	tArvore* a = (tArvore*)malloc(sizeof(tArvore));
@@ -53,12 +54,6 @@ int compara(const void* v1, const void* v2)
 	freq1 = ListaFreq(((tArvore*)v1)->Item);
 	freq2 = ListaFreq(((tArvore*)v2)->Item);
 	return (freq1 - freq2);
-}
-void OrdenaArvore(tArvore* Arvore)
-{
-//	qsort (Arvore, n, sizeof(tArvore), compara); // 'n' é o numero de elementos da lista Arvore! 
-	// Criar uma função para contar o numero de elementos da lista Arvore!!
-	// Lembre-se que a lista Arvore tem dois itens com informações, ou seja, cada par de itens conta como um elemento;
 }
 
 tArvore* MontaArvore(tArvore* Arvore)

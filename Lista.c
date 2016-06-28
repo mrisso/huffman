@@ -1,13 +1,16 @@
+#define NAO_USADO												0
+#define USADO													1
 
 #include "Lista.h"
 
-// LISTA DUPLAMENTE ENCADEADA CIRCULAR
+// LISTA DUPLAMENTE ENCADEADA
 
 
 struct lista{
 	TipoDados Item;
 	struct lista* Ant;
 	struct lista* Prox;
+	int flag; //Indica se o nó da lista já foi utilizado
 };
 
 void CriaLista(TipoDados *vetor, int tam, tLista **lista)
@@ -18,7 +21,7 @@ void CriaLista(TipoDados *vetor, int tam, tLista **lista)
 	{		
 		aux = vetor[i];
 		printf("%c - %d\n", aux.Letra, aux.Freq);
-		//InsereItem(lista, InitItem(aux));
+		InsereItem(lista, InitItem(aux));
 	}
 }
 
@@ -64,6 +67,7 @@ tLista* CriaItem(char letra, int freq) // Recebe a letra e a frequência do item
 	lista->Prox = NULL;
 	lista->Item.Letra = letra; // <-
 	lista->Item.Freq = freq; // <-
+	return lista;
 }
 
 tLista* InitItem(TipoDados item)
@@ -83,22 +87,16 @@ void InsereItem(tLista **lista, tLista *novoItem)
 	{
 		// -> Lista de item único <-
 		*lista = novoItem; //Novo item é o primeiro item
-		novoItem->Ant = *lista; //Novo item é o anterior (lista circular)
-		novoItem->Prox = *lista; //Novo item é o próximo (lista circular)
 	}
 	
 	else
 	{
-		while(andador->Prox != *lista)
+		while(andador->Prox != NULL)
 			andador = andador->Prox; //Ir até o fim da lista
 		
 		andador->Prox = novoItem; //Adicionar ao fim da lista
 		novoItem->Ant = andador; //Campo anterior do novo item é o antigo útlimo item
-		(*lista)->Ant = novoItem; //Campo anterior do primeiro item da lista aponta para o último item (novo)
-		
 	}
-
-	novoItem->Prox = *lista; //Último Item da Lista aponta para o primeiro
 
 }
 
@@ -160,4 +158,30 @@ char DadoLetra(TipoDados elemento)
 int DadoFreq(TipoDados elemento)
 {
 	return elemento.Freq;
+}
+
+int compara (const void *v1, const void *v2)
+{
+	int d1, d2;
+
+	d1 = ((const TipoDados *) v1)->Freq;
+	d2 = ((const TipoDados *) v2)->Freq;
+	
+	return d1 - d2;
+}
+
+tLista *operaLista(tLista *lista, int tam)
+{
+	tLista *andador = lista;
+
+	if(andador == NULL)
+		return NULL;
+
+	
+
+}
+
+void ordenaVetor(TipoDados *vetor, int tam)
+{
+	qsort(vetor,tam,sizeof(TipoDados),compara);
 }

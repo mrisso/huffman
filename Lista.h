@@ -44,3 +44,7 @@ int DadoFreq(TipoDados elemento);
 void SetProx(tLista *elemento, tLista *prox);
 
 void SetAnt(tLista *elemento, tLista *ant);
+
+int compara (const void *v1, const void *v2);
+
+void ordenaVetor(TipoDados *vetor, int tam);
