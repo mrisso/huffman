@@ -1,16 +1,14 @@
+
+#include "Arvore.h"
 #include "Lista.h"
 // ARVORE BINARIA GENÉRICA
 // O CODIGO NÃO UTILIZA O TAD LISTA AINDA, AO INSERIR MODIFICAR ATRIBUIÇÕES!!!!
-
-typedef struct Arv tArvore;
 
 struct Arv{ 
 	tLista *Item;
 	struct Arv* dir;
 	struct Arv* esq;
 };
-
-typedef struct tabela tTabela;
 
 struct tabela{
 	char Letra;

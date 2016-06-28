@@ -9,6 +9,10 @@ typedef struct Dado{
 } TipoDados;
 typedef struct lista tLista;
 
+void CriaLista(TipoDados *vetor, int tam, tLista **lista);
+
+TipoDados* ArmazenaLetras(char* String, long tamanho);
+
 tLista* InitLista(void);
 
 tLista* CriaItem(char letra, int freq);

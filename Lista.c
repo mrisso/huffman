@@ -1,3 +1,4 @@
+
 #include "Lista.h"
 
 // LISTA DUPLAMENTE ENCADEADA CIRCULAR
@@ -8,6 +9,48 @@ struct lista{
 	struct lista* Ant;
 	struct lista* Prox;
 };
+
+void CriaLista(TipoDados *vetor, int tam, tLista **lista)
+{
+	int i;
+	TipoDados aux;
+	for(i=0; i<tam; i++)
+	{		
+		aux = vetor[i];
+		printf("%c - %d\n", aux.Letra, aux.Freq);
+		//InsereItem(lista, InitItem(aux));
+	}
+}
+
+TipoDados* ArmazenaLetras(char* String, long tamanho)
+{
+	TipoDados* Vetor = (TipoDados*)malloc(256*sizeof(TipoDados)); // Vetor com o tamanho da AscII
+	int i, j, k=0;
+	int freq=0;
+	for(i=0; i<255; i++)
+	{
+		for(j=0; j<(tamanho); j++)
+		{
+			if(String[j] == i)
+				freq++;
+		}
+		
+		if(freq != 0)
+		{
+			Vetor[k].Letra = i;
+			Vetor[k].Freq = freq;
+			k++;
+		}
+		else
+		{
+			Vetor[k].Letra = '\0';
+			Vetor[k].Freq = 0;	
+		}
+		
+		freq = 0;
+	}
+	return Vetor;
+}
 
 tLista* InitLista(void)
 {
@@ -39,21 +82,23 @@ void InsereItem(tLista **lista, tLista *novoItem)
 	if(andador==NULL) //Caso lista vazia
 	{
 		// -> Lista de item único <-
-		*lista=novoItem; //Novo item é o primeiro item
+		*lista = novoItem; //Novo item é o primeiro item
 		novoItem->Ant = *lista; //Novo item é o anterior (lista circular)
 		novoItem->Prox = *lista; //Novo item é o próximo (lista circular)
 	}
 	
 	else
 	{
-		while(andador->Prox!=*lista)
-			andador=andador->Prox; //Ir até o fim da lista
+		while(andador->Prox != *lista)
+			andador = andador->Prox; //Ir até o fim da lista
+		
 		andador->Prox = novoItem; //Adicionar ao fim da lista
 		novoItem->Ant = andador; //Campo anterior do novo item é o antigo útlimo item
 		(*lista)->Ant = novoItem; //Campo anterior do primeiro item da lista aponta para o último item (novo)
+		
 	}
 
-	novoItem->Prox=*lista; //Último Item da Lista aponta para o primeiro
+	novoItem->Prox = *lista; //Último Item da Lista aponta para o primeiro
 
 }
 
